@@ -1,0 +1,13 @@
+default:
+  type: mysql
+  host: localhost
+  user: root
+  password: password
+  database: test_db
+
+production:
+  type: postgresql
+  host: prod-db-host
+  user: prod-user
+  password: prod-password
+  database: prod_db

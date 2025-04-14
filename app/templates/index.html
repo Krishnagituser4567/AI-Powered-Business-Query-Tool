@@ -1,0 +1,115 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h1 class="text-3xl font-bold text-center mb-6">AI Business Query Tool</h1>
+<form id="query-form" class="bg-white p-6 rounded shadow-md max-w-2xl mx-auto">
+    <label for="model" class="block font-medium mb-2">Select AI Model:</label>
+    <select id="model" name="model" class="w-full border rounded p-2 mb-4">
+        <option value="text-davinci-003">OpenAI - Davinci</option>
+        <option value="azure-ai">Azure AI</option>
+        <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+    </select>
+
+    <label for="api-key" class="block font-medium mb-2">API Key:</label>
+    <input type="password" id="api-key" name="api-key" class="w-full border rounded p-2 mb-4" placeholder="Enter API Key" required>
+
+    <label for="question" class="block font-medium mb-2">Business Question:</label>
+    <textarea id="question" name="question" class="w-full border rounded p-2 mb-4" placeholder="Enter your business question here..."></textarea>
+    <p class="text-sm text-gray-500">If no business question is provided, the default prompt will be used.</p>
+
+    <h3 class="text-lg font-semibold mb-2 mt-5">Database Configuration</h3>
+    <label for="db-type" class="block font-medium mb-2">Database Type:</label>
+    <select id="db-type" name="db-type" class="w-full border rounded p-2 mb-4">
+        <option value="local-sql-server">Local SQL Server</option>
+    </select>
+
+    <label for="host" class="block font-medium mb-2">Host:</label>
+    <input type="text" id="host" name="host" class="w-full border rounded p-2 mb-4" placeholder="localhost" required>
+
+    <label for="database" class="block font-medium mb-2">Database Name:</label>
+    <input type="text" id="database" name="database" class="w-full border rounded p-2 mb-4" placeholder="Enter database name" required>
+
+    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded w-full">Submit</button>
+</form>
+
+<div class="text-center mt-4">
+    <a href="/prompt" class="bg-gray-500 text-white px-4 py-2 rounded">Show Default Prompt</a>
+</div>
+
+<div id="loading" class="hidden fixed inset-0 flex flex-col justify-center items-center bg-white bg-opacity-75">
+    <div class="flex space-x-2">
+        <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce"></div>
+        <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce delay-200"></div>
+        <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce delay-400"></div>
+    </div>
+    <p class="mt-4 text-lg font-medium text-gray-700">Processing your request...</p>
+</div>
+
+<div id="result" class="mt-6 bg-gray-100 p-4 rounded shadow-md hidden">
+    <h2 class="text-lg font-bold mb-2">AI Result:</h2>
+    <pre id="result-content" class="whitespace-pre-wrap"></pre>
+</div>
+
+<script>
+    document.getElementById('query-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const model = document.getElementById('model').value;
+        const apiKey = document.getElementById('api-key').value;
+        const question = document.getElementById('question').value || "Default prompt if no question provided.";
+        const dbType = document.getElementById('db-type').value;
+        const host = document.getElementById('host').value;
+        const database = document.getElementById('database').value;
+
+        document.getElementById('loading').classList.remove('hidden');
+        document.getElementById('result').classList.add('hidden');
+
+        const response = await fetch('/query', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                model,
+                api_key: apiKey,
+                question,
+                db_config: {
+                    type: dbType,
+                    host,
+                    database
+                }
+            })
+        });
+
+        const result = await response.json();
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('result').classList.remove('hidden');
+        document.getElementById('result-content').innerText = result.answer || result.error;
+
+        // Automatically redirect to the result section
+        window.location.href = '#result';
+    });
+
+    // Preserve form data in localStorage
+    const form = document.getElementById('query-form');
+    form.addEventListener('input', () => {
+        const formData = new FormData(form);
+        const data = {};
+        formData.forEach((value, key) => {
+            data[key] = value;
+        });
+        localStorage.setItem('formData', JSON.stringify(data));
+    });
+
+    // Restore form data from localStorage
+    window.addEventListener('load', () => {
+        const savedData = JSON.parse(localStorage.getItem('formData'));
+        if (savedData) {
+            Object.keys(savedData).forEach(key => {
+                const input = form.elements[key];
+                if (input) input.value = savedData[key];
+            });
+        }
+    });
+</script>
+{% endblock %}

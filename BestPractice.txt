@@ -1,0 +1,33 @@
+✅ 4) Standard Best Practices
+🔐 Security
+Use python-dotenv or configparser to manage secrets.
+
+Don’t store credentials in code — use .env or secrets vault.
+
+Sanitize all inputs to prevent injection attacks.
+
+🧪 Testing
+Write unit tests for AI + DB handlers.
+
+Mock DB and AI APIs for faster CI/CD.
+
+Use pytest or unittest.
+
+💅 UI/UX
+Use TailwindCSS or Bootstrap for a polished feel.
+
+Keep navigation minimal.
+
+Show loading indicators when querying AI or DB.
+
+⚙️ Maintainability
+Modularize services: AI logic and DB logic should be cleanly separated.
+
+Use interfaces/abstractions if you’ll switch AI providers.
+
+Store logs for debugging (use Python logging).
+
+📊 Performance
+Cache database schema + sample data if it doesn’t change often.
+
+Async calls to AI/database can improve responsiveness.

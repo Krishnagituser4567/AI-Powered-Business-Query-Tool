@@ -1,0 +1,31 @@
+ai_web_project/
+├── app/                        # Main app logic
+│   ├── __init__.py
+│   ├── routes.py               # Flask/FastAPI routes
+│   ├── services/               # Business logic
+│   │   ├── ai_engine.py        # Handles AI communication
+│   │   ├── db_connector.py     # DB connect + fetch tables
+│   │   └── table_parser.py     # Structure/sample data handler
+│   └── templates/              # HTML Jinja2 templates
+│       ├── layout.html
+│       └── index.html
+│   └── static/                 # CSS/JS assets
+│       ├── css/
+│       ├── js/
+│       └── images/
+│
+├── models/                     # Optional: AI model handlers
+│   ├── openai_model.py
+│   └── azure_ai_model.py
+│
+├── config/                     # Configuration files
+│   ├── db_config.yaml
+│   └── app_config.py
+│
+├── tests/                      # Unit & integration tests
+│   └── test_ai_engine.py
+│
+├── .env                        # Environment variables
+├── requirements.txt
+├── run.py                      # Entry point
+└── README.md

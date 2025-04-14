@@ -1,0 +1,24 @@
+---------------------------------------------------
+|           AI-Powered Business Query Tool        |
+---------------------------------------------------
+
+1. UI:
+   - Dropdown: Select AI engine (e.g., OpenAI, Azure AI)
+   - Input: Business question (e.g., "Show top 10 products")
+   - Input: DB credentials (host, port, DB name, user/pass)
+   - Submit button
+
+2. Backend Flow:
+   - Validate DB input
+   - Connect to DB → fetch table names + sample rows
+   - Format table info → send to AI engine with business question
+   - AI returns SQL or data model logic
+   - Execute SQL if needed → fetch result
+   - Return results (or explanation) to front-end
+
+3. Tech Stack:
+   - Frontend: HTML + Tailwind + JS
+   - Backend: Python (Flask or FastAPI)
+   - AI: OpenAI/ChatGPT API, or Azure AI
+   - DB: PostgreSQL, MySQL, SQL Server, etc.
+   - Security: Use .env + hashed credentials
